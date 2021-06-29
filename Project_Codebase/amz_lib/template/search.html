@@ -1,0 +1,336 @@
+{%load static%}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Library</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" href="{% static 'logo.jpg' %}" />
+  </head>
+  <body>
+    <!-- header/ navbar -->
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid p-3">
+        <div>
+          <a class="navbar-brand" href="/books/">
+            <img
+              src="{% static 'logo.jpg' %}"
+              alt=""
+              width="30"
+              height="30"
+              class="d-inline-block align-text-top"
+            />
+            Book Library
+          </a>
+          <a href="/category" class="text-decoration-none text-dark"
+            >Categories</a
+          >
+          <a
+            href="/analytics/top-books-by-visits"
+            class="text-decoration-none text-dark ms-4"
+            >Analytics</a
+          >
+          <a href="/books/add/" class="text-decoration-none text-dark ms-4"
+            >Add a Book</a
+          >
+          <a href="/search" class="text-decoration-none text-dark ms-4"
+            >Search</a
+          >
+          <a href="/books/update/" class="text-decoration-none text-dark ms-4"
+            >Update</a
+          >
+          <a href="/books/delete/" class="text-decoration-none text-dark ms-4"
+            >Delete</a
+          >
+          <a href="/search/history/" class="text-decoration-none text-dark ms-4"
+            >History</a
+          >
+
+        </div>
+        <div id="authentication">
+          {% if user.is_authenticated %}
+          <a href="/user/logout" class="btn btn-info mx-4">Logout</a>
+          {%else%}
+          <button
+            type="button"
+            class="btn btn-info"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            class="btn btn-info mx-4"
+            data-bs-toggle="modal"
+            data-bs-target="#signupModal"
+          >
+            Sign Up
+          </button>
+          {%endif%}
+        </div>
+      </div>
+    </nav>
+    <!-- Authentication status -->
+    {% for message in messages %}
+    <div
+      class="alert alert-{{message.tags}} alert-dismissible fade show"
+      role="alert"
+    >
+      <strong>Message: </strong> {{message}}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+
+    <!-- Registration modal -->
+    <div
+      class="modal fade"
+      id="signupModal"
+      tabindex="-1"
+      aria-labelledby="signupModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="signupModalLabel">
+              Register and get your desired books
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- input form start -->
+          <div class="modal-body">
+            <form action="/user/signup" method="post">
+              {% csrf_token %}
+              <label for="name" class="ms-5 mb-1">Your Name</label><br />
+              <input
+                required
+                type="text"
+                name="name"
+                id="name"
+                class="rounded-2 ms-5 mb-3 w-75"
+              /><br />
+              <label for="emailid" class="ms-5 mb-1">Email Id</label><br />
+              <input
+                required
+                type="email"
+                name="email"
+                id="emailid"
+                class="rounded-2 ms-5 mb-3 w-75"
+              /><br />
+              <label for="password" class="ms-5 mb-1">Password</label><br />
+              <input
+                required
+                type="password"
+                name="password"
+                id="password"
+                class="rounded-2 ms-5 mb-3 w-75"
+              /><br />
+              <label for="confpassword" class="ms-5 mb-1"
+                >Confirm Password</label
+              ><br />
+              <input
+                required
+                type="password"
+                name="confpassword"
+                id="confpassword"
+                class="rounded-2 ms-5 mb-3 w-75"
+              />
+
+              <button type="submit" class="btn btn-info mt-3 ms-5">
+                Submit
+              </button>
+            </form>
+          </div>
+          <!-- input form end -->
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Log In</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- input form start -->
+          <div class="modal-body">
+            <form action="/user/login" method="post">
+              {% csrf_token %}
+              <label for="loginEmailId" class="ms-5 mb-1">Email Id</label><br />
+              <input
+                required
+                type="email"
+                name="loginEmailId"
+                id="loginEmailId"
+                class="rounded-2 ms-5 mb-3 w-75"
+              /><br />
+              <label for="loginPassword" class="ms-5 mb-1">Password</label
+              ><br />
+              <input
+                required
+                type="password"
+                name="loginPassword"
+                id="loginPassword"
+                class="rounded-2 ms-5 mb-3 w-75"
+              />
+
+              <button type="submit" class="btn btn-info mt-3 ms-5">
+                Submit
+              </button>
+            </form>
+          </div>
+          <!-- input form end -->
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid mt-5 mb-5">
+      <form action="" method="POST">
+        {%csrf_token%}
+        <div class="row">
+            <div class="row">
+              <div class="col-2"><center><label for="TITLE">TITLE</label></div></center>
+              <div class="col-10">
+                <input type="text" id="TITLE" name="TITLE" value="{{TITLE}}" />
+              </div>
+            </div>
+      
+            <div class="row mt-3">
+              <div class="col-2"><center><label for="AUTHOR">AUTHOR</label></div></center>
+              <div class="col-10">
+                <input
+                  type="text"
+                  id="AUTHOR"
+                  name="AUTHOR"
+                  value="{{AUTHOR}}"
+                />
+              </div>
+            </div>
+
+              <div class="row mt-3">
+              <div class="col-2"><center><label for="CATEGORY">CATEGORY</label></div></center>
+              <div class="col-10">
+                <select id="CATEGORY" name="CATEGORY">
+                  <option value="-1" selected>All</option>
+                  <option value="0">Arts and Photography</option>
+                  <option value="1">Biographies and Memoirs	</option>
+                  <option value="2">Business and Money	</option>
+                  <option value="3">Calendars</option>
+                  <option value="4">Children's Books	</option>
+                  <option value="5">Comics and Graphic Novels	</option>
+                  <option value="6">Computers and Technology	</option>
+                  <option value="7">Cookbooks, Food and Wine	</option>
+                  <option value="8">Crafts, Hobbies and Home	</option>
+                  <option value="9">Christian Books and Bibles	</option>
+                  <option value="10">Engineering and Transportation	</option>
+                  <option value="11">Health, Fitness and Dieting	</option>
+                  <option value="12">History</option>
+                  <option value="13">Humor and Entertainment	</option>
+                  <option value="14">Law</option>
+                  <option value="15">Literature and Fiction	</option>
+                  <option value="16">Medical Books	</option>
+                  <option value="17">Mystery, Thriller and Suspense	</option>
+                  <option value="18">Parenting and Relationships	</option>
+                  <option value="19">Politics and Social Sciences	</option>
+                  <option value="20">Reference</option>
+                  <option value="21">Religion and Spirituality	</option>
+                  <option value="22">Romance</option>
+                  <option value="23">Science and Math	</option>
+                  <option value="24">Science Fiction and Fantasy	</option>
+                  <option value="25">Self-Help	</option>
+                  <option value="26">	Sports and Outdoors</option>
+                  <option value="27">Teen and Young Adult</option>
+                  <option value="28">	Test Preparation</option>
+                  <option value="29">	Travel</option>
+                  <option value="30">Gay and Lesbian</option>
+                  <option value="31">Education and Teaching	</option>
+                </select>
+              </div>
+            </div>
+          
+
+          <div class="row mt-3">
+            <div class = "col-2">
+              <center>
+                <button type="submit" class="btn btn-success" name="action" value="Search">
+                  Search
+                </button>
+              </center>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <div class="container mt-5">
+      <div id="books_list">
+        <div class="row mb-5">
+          {% for book in books %}
+          <div class="card border-0 mx-3 mb-4" style="width: 15.7rem">
+            <!-- <div class="btn" onclick="ASIN=`{{book.ASIN}}`; getBookDetails()"> -->
+            <a
+              href="/books/id/{{ book.ASIN }}"
+              class="btn text-decoration-none text-dark"
+            >
+              <img
+                src="{{ book.IMAGEURL }}"
+                loading="lazy"
+                class="card-img-top w-100"
+                style="height: 17rem"
+              />
+              <div class="card-body px-1">
+                <h5 class="card-title">{{ book.TITLE }}</h5>
+                <p class="card-text" style="font-size: 17.5px">
+                  <b>Author: </b>{{ book.AUTHOR }}
+                </p>
+                <a
+                  class="text-decoration-none"
+                  href="/category/{{ book.CATEGORYID }}"
+                  >#{{ book.CATEGORY }}</a
+                >
+              </div>
+            </a>
+        </div>
+        {%empty%}
+        <center><h2 class="mt-5">No books found</h2></center>
+        {% endfor %}
+    </div>
+    </body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+</html>

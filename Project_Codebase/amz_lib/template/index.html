@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Library</title>
+
+    <style>
+      body {
+        margin: 0%;
+        padding: 0%;
+        background-color: rgba(0, 0, 0, 0.733);
+      }
+      header::before {
+        content: "";
+        background: url("https://wallpaperaccess.com/full/124383.jpg") no-repeat
+          center center/cover;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.75;
+      }
+      header {
+        color: white;
+        width: 100%;
+        height: 69px;
+      }
+      section {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: 355px;
+        align-items: center;
+        justify-content: center;
+        margin: 25px 11%;
+      }
+      p {
+        font-size: 25px;
+        text-align: center;
+      }
+      a {
+        text-decoration: none;
+        color: white;
+        background: #7878f9;
+        padding: 10px;
+        border-radius: 3px;
+        margin-top: 15px;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h2 style="padding-left: 50px">Book Library</h2>
+    </header>
+    <section>
+      <h1 style="font-size: 50px">Welcome to Open Source Book Library</h1>
+      <p>
+        We are a open source Library. All our books are from various online
+        resources.<br />
+        Hope you find what you're searching for from the collection of.
+      </p>
+      <h1 style="font-size: 50px; font-weight: initial">
+        <span id="books_count">100000</span>+ books
+      </h1>
+
+      <a href="books">View All Books</a>
+    </section>
+
+    <script>
+      window.onload = function () {
+        let element = document.getElementById("books_count");
+        let number = 0;
+        setInterval(() => {
+          if (number == 100000) return;
+          number += 500;
+          element.innerText = number;
+        }, 10);
+      };
+    </script>
+  </body>
+</html>
